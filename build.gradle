@@ -4,6 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -192,6 +193,29 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = findProperty('curseforge_token') ?: System.getenv('CURSEFORGE_TOKEN')
+
+    def mainFile = upload(594527, jar)
+    mainFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    mainFile.releaseType = 'beta'
+    mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : 'See GitHub for changes.'
+    mainFile.changelogType = 'markdown'
+    mainFile.addModLoader('NeoForge')
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion('Java 21')
+    mainFile.addGameVersion('Client')
+    mainFile.addGameVersion('Server')
+    // Soft dependencies with 1.21.1 files on CurseForge
+    mainFile.addOptional('create')
+    mainFile.addOptional('geckolib')
+    mainFile.addOptional('jei')
+    mainFile.addOptional('just-enough-resources-jer')
+    mainFile.addOptional('the-twilight-forest')
+    mainFile.addOptional('l_enders-cataclysm')
+    mainFile.addOptional('serene-seasons')
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
