@@ -9,9 +9,9 @@
       "tag": "c:gu/void_worm"
     },
     {
+      "type": "neoforge:single",
       "amount": 500,
-      "fluid": "minecraft:lava",
-      "nbt": {}
+      "fluid": "minecraft:lava"
     }
   ],
   "results": [
