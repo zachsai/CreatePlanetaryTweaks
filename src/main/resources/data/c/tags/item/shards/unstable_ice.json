@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:unstable_ice_shard",
+      "required": false
+    }
+  ]
+}

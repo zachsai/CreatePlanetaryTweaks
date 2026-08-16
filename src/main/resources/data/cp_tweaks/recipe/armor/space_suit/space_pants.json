@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "c:plates/steel"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    },
+    "V": {
+      "item": "cp_tweaks:void_wormed_leggings"
+    }
+  },
+  "pattern": [
+    "###",
+    "WVW",
+    "# #"
+  ],
+  "result": {
+    "id": "ad_astra:space_pants"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:ender_guardian_gu",
+      "required": false
+    }
+  ]
+}

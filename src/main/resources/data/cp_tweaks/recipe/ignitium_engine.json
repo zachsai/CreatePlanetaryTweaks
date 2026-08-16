@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "engines",
+  "key": {
+    "#": {
+      "tag": "c:plates/ignitium"
+    },
+    "E": {
+      "item": "ad_astra:engine_frame"
+    },
+    "F": {
+      "item": "ad_astra:fan"
+    }
+  },
+  "pattern": [
+    "###",
+    " E ",
+    " F "
+  ],
+  "result": {
+    "id": "cp_tweaks:ignitium_engine"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cataclysm"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

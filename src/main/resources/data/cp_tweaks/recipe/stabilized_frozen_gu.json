@@ -1,0 +1,42 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "superheated",
+  "ingredients": [
+    {
+      "tag": "c:gu/void_worm"
+    },
+    {
+      "tag": "c:gu/ender_guardian"
+    },
+    {
+      "tag": "c:gu/monstrosity"
+    },
+    {
+      "item": "cp_tweaks:unstable_ice_shard"
+    }
+  ],
+  "results": [
+    {
+      "count": 1,
+      "id": "cp_tweaks:stabilized_frozen_gu"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "alexsmobs"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cataclysm"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    }
+  ]
+}

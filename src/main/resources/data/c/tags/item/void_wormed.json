@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:void_wormed_sword",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_axe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_pickaxe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_shovel",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_hoe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_helmet",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_chestplate",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_leggings",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:void_wormed_boots",
+      "required": false
+    }
+  ]
+}

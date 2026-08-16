@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:item/generated",
+  "base": {
+    "parent": "cp_tweaks:item/giant_tool_base",
+    "textures": {
+      "layer0": "cp_tweaks:item/ice_shard/axe"
+    }
+  },
+  "loader": "forge:separate_transforms",
+  "perspectives": {
+    "gui": {
+      "elements": [
+        {
+          "faces": {
+            "south": {
+              "texture": "#all",
+              "tintindex": 0,
+              "uv": [
+                3.0,
+                5.0,
+                11.0,
+                13.0
+              ]
+            }
+          },
+          "from": [
+            0,
+            0,
+            0
+          ],
+          "to": [
+            16,
+            16,
+            0
+          ]
+        }
+      ],
+      "textures": {
+        "all": "cp_tweaks:item/ice_shard/axe"
+      }
+    }
+  }
+}

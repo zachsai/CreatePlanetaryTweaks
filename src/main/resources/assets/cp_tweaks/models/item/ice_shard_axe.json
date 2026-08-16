@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "cp_tweaks:item/ice_shard/axe"
+  }
+}

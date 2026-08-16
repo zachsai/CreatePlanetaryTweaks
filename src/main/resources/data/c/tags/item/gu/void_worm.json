@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:void_worm_gu",
+      "required": false
+    }
+  ]
+}
