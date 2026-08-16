@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "0 0",
+    "0 0"
+  ],
+  "key": {
+    "0": {
+      "tag": "c:ingots/ostrum"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "cp_tweaks:ostrum_boots"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    }
+  ]
+}

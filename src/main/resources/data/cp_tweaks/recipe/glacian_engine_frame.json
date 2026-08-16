@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "engines",
+  "key": {
+    "#": {
+      "tag": "c:rods/iron"
+    },
+    "F": {
+      "item": "cp_tweaks:stabilized_ice_sheet"
+    }
+  },
+  "pattern": [
+    "###",
+    "#F#",
+    "###"
+  ],
+  "result": {
+    "id": "cp_tweaks:glacian_engine_frame"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cataclysm"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "alexsmobs"
+    }
+  ]
+}

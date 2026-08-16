@@ -1,0 +1,73 @@
+{
+  "type": "ad_astra:nasa_workbench",
+  "ingredients": [
+    {
+      "item": "ad_astra:rocket_nose_cone"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "item": "cp_tweaks:reinforced_rocket_fin"
+    },
+    {
+      "item": "ad_astra:steel_tank"
+    },
+    {
+      "item": "ad_astra:steel_tank"
+    },
+    {
+      "item": "cp_tweaks:reinforced_rocket_fin"
+    },
+    {
+      "item": "cp_tweaks:reinforced_rocket_fin"
+    },
+    {
+      "item": "ad_astra:steel_engine"
+    },
+    {
+      "item": "cp_tweaks:reinforced_rocket_fin"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ad_astra:tier_1_rocket"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cp_tweaks"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cataclysm"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "alexsmobs"
+    }
+  ]
+}

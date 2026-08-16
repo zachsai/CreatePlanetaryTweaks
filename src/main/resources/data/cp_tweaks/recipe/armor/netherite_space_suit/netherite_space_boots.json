@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "c:plates/reinforced_ostrum"
+    },
+    "D": {
+      "tag": "c:plates/desh"
+    },
+    "N": {
+      "item": "ad_astra:space_boots"
+    }
+  },
+  "pattern": [
+    " N ",
+    "D D",
+    "# #"
+  ],
+  "result": {
+    "id": "ad_astra:netherite_space_boots"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    }
+  ]
+}

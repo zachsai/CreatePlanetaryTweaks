@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:ice_shard_sword",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_axe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_pickaxe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_shovel",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_hoe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_helmet",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_chestplate",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_leggings",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:ice_shard_boots",
+      "required": false
+    }
+  ]
+}

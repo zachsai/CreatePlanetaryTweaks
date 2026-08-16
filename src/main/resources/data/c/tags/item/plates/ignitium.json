@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:ignitium_sheet",
+      "required": false
+    }
+  ]
+}

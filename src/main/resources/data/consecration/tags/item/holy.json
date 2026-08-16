@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "cp_tweaks:zinc_axe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:zinc_pickaxe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:zinc_sword",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:zinc_hoe",
+      "required": false
+    },
+    {
+      "id": "cp_tweaks:zinc_shovel",
+      "required": false
+    }
+  ]
+}

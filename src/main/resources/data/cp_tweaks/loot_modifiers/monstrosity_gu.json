@@ -1,0 +1,11 @@
+{
+  "type": "cp_tweaks:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "cataclysm:entities/netherite_monstrosity"
+    }
+  ],
+  "item": "cp_tweaks:monstrosity_gu",
+  "count": 2
+}

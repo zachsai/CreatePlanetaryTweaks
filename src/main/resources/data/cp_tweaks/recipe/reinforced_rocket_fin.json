@@ -1,0 +1,36 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "tag": "c:gu/void_worm"
+    },
+    {
+      "item": "ad_astra:rocket_fin"
+    },
+    {
+      "item": "ad_astra:rocket_fin"
+    },
+    {
+      "item": "ad_astra:rocket_fin"
+    },
+    {
+      "item": "ad_astra:rocket_fin"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "cp_tweaks:reinforced_rocket_fin"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ad_astra"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

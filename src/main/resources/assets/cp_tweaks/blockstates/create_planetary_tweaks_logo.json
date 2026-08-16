@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cp_tweaks:block/create_planetary_tweaks_logo"
+    }
+  }
+}

@@ -4,6 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -18,11 +19,19 @@ tasks.named('wrapper', Wrapper).configure {
 // Read the mod_version property from gradle.properties
 def modVersion = project.findProperty("mod_version") ?: "1.0.0-1.21"
 
-version = "neoforge-1.21-$modVersion"
+version = "neoforge-${minecraft_version}-$modVersion"
 group = 'net.celsiusqc.cp_tweaks' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 repositories {
     mavenLocal()
+    maven {
+        name = 'BlameJared (JEI)'
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
 }
 
 base {
@@ -92,6 +101,18 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
+// NeoForge 21.1.248 pulls ASM 9.10.1 while NeoGradle's legacy classpath pins 9.5,
+// which makes BootstrapLauncher abort on duplicate modules. Keep them consistent.
+configurations.configureEach {
+    resolutionStrategy {
+        force 'org.ow2.asm:asm:9.10.1',
+              'org.ow2.asm:asm-commons:9.10.1',
+              'org.ow2.asm:asm-tree:9.10.1',
+              'org.ow2.asm:asm-util:9.10.1',
+              'org.ow2.asm:asm-analysis:9.10.1'
+    }
+}
+
 dependencies {
     // Specify the version of Minecraft to use.
     // Depending on the plugin applied there are several options. We will assume you applied the userdev plugin as shown above.
@@ -100,6 +121,13 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
+
+    // Optional integrations — compile-time only, never required at runtime.
+    // GeckoLib powers the Ice Shard armor renderer; guarded behind ModList.isLoaded("geckolib").
+    compileOnly "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.9.2"
+    // JEI plugin (only loads when JEI is present)
+    compileOnly "mezz.jei:jei-1.21.1-common-api:19.44.0.401"
+    compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.44.0.401"
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -165,6 +193,29 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = findProperty('curseforge_token') ?: System.getenv('CURSEFORGE_TOKEN')
+
+    def mainFile = upload(594527, jar)
+    mainFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    mainFile.releaseType = 'beta'
+    mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : 'See GitHub for changes.'
+    mainFile.changelogType = 'markdown'
+    mainFile.addModLoader('NeoForge')
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion('Java 21')
+    mainFile.addGameVersion('Client')
+    mainFile.addGameVersion('Server')
+    // Soft dependencies with 1.21.1 files on CurseForge
+    mainFile.addOptional('create')
+    mainFile.addOptional('geckolib')
+    mainFile.addOptional('jei')
+    mainFile.addOptional('just-enough-resources-jer')
+    mainFile.addOptional('the-twilight-forest')
+    mainFile.addOptional('l_enders-cataclysm')
+    mainFile.addOptional('serene-seasons')
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

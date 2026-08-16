@@ -1,0 +1,11 @@
+{
+  "type": "cp_tweaks:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "alexsmobs:entities/void_worm"
+    }
+  ],
+  "item": "cp_tweaks:void_worm_gu",
+  "count": 2
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "entries": [
+    "cp_tweaks:void_worm_gu",
+    "cp_tweaks:monstrosity_gu",
+    "cp_tweaks:ender_guardian_gu",
+    "cp_tweaks:unstable_ice_shard"
+  ]
+}
