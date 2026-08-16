@@ -1,6 +1,7 @@
 {
   "type": "create:mechanical_crafting",
-  "acceptMirrored": false,
+  "accept_mirrored": false,
+  "category": "misc",
   "key": {
     "S": {
       "item": "ad_astra_rocketed:tier_5_rocket"
@@ -15,7 +16,7 @@
   ],
   "result": {
     "count": 1,
-    "item": "ad_astra_rocketed:tier_6_rocket"
+    "id": "ad_astra_rocketed:tier_6_rocket"
   },
   "neoforge:conditions": [
     {

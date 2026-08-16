@@ -171,10 +171,10 @@ public class ModCreativeModTab {
                         }
 
                         if (mods.isLoaded("cataclysm") && mods.isLoaded("create")) {
-                            output.accept(ModItems.STURDY_DESH_SHEET.get());
                             output.accept(ModItems.IGNITIUM_SHEET.get());
 
                             if (mods.isLoaded("ad_astra")) {
+                                output.accept(ModItems.STURDY_DESH_SHEET.get());
                                 output.accept(ModItems.STURDY_OSTRUM_SHEET.get());
                                 output.accept(ModItems.IGNITIUM_ENGINE.get());
                                 output.accept(ModItems.REINFORCED_ROCKET_NOSE_CONE.get());
