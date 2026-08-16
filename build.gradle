@@ -214,7 +214,7 @@ tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurs
     mainFile.addOptional('jei')
     mainFile.addOptional('just-enough-resources-jer')
     mainFile.addOptional('the-twilight-forest')
-    mainFile.addOptional('l_enders-cataclysm')
+    mainFile.addOptional('lendercataclysm')
     mainFile.addOptional('serene-seasons')
 }
 
