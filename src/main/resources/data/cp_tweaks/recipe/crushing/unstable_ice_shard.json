@@ -31,7 +31,6 @@
       "id": "create:experience_nugget"
     }
   ],
-  "processingTime": 300,
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
@@ -41,5 +40,6 @@
       "type": "neoforge:mod_loaded",
       "modid": "ad_astra"
     }
-  ]
+  ],
+  "processing_time": 300
 }

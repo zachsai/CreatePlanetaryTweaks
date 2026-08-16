@@ -5,8 +5,9 @@
       "item": "minecraft:glass_bottle"
     },
     {
+      "type": "neoforge:tag",
       "amount": 250,
-      "fluidTag": "c:arachnarch_venom"
+      "tag": "c:arachnarch_venom"
     }
   ],
   "results": [
