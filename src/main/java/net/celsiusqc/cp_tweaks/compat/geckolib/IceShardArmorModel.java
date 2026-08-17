@@ -1,7 +1,6 @@
-package net.celsiusqc.cp_tweaks.item.client;
+package net.celsiusqc.cp_tweaks.compat.geckolib;
 
 import net.celsiusqc.cp_tweaks.CreatePlanetaryTweaks;
-import net.celsiusqc.cp_tweaks.base.armors.IceShardArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

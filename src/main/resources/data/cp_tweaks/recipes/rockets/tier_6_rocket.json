@@ -5,6 +5,10 @@
       "conditions": [
         {
           "type": "forge:mod_loaded",
+          "modid": "ad_astra_rocketed"
+        },
+        {
+          "type": "forge:mod_loaded",
           "modid": "cp_tweaks"
         },
         {

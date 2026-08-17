@@ -4,6 +4,7 @@ import net.celsiusqc.cp_tweaks.base.block.ModBlocks;
 import net.celsiusqc.cp_tweaks.fluid.ModFluidTypes;
 import net.celsiusqc.cp_tweaks.fluid.ModFluids;
 import net.celsiusqc.cp_tweaks.item.*;
+import net.celsiusqc.cp_tweaks.loot.ModLootModifiers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -14,10 +15,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CreatePlanetaryTweaks.MOD_ID)
@@ -41,9 +42,13 @@ public class CreatePlanetaryTweaks {
         ModBlocks.register(modEventBus);
         ModFluids.register(modEventBus);
         ModFluidTypes.register(modEventBus);
+        ModLootModifiers.register(modEventBus);
         //ModEntities.register(modEventBus); //////////////////////////////////// DISABLED CUSTOM ENTITY FROM TWILIGHT FOREST RENDERER //////////////////////////////////////////////
 
-        GeckoLib.initialize();
+        // Soft dependency: only touch GeckoLib classes if it's actually loaded.
+        if (ModList.get().isLoaded("geckolib")) {
+            net.celsiusqc.cp_tweaks.compat.geckolib.GeckoLibCompat.initialize();
+        }
 
 
 

@@ -1,6 +1,5 @@
-package net.celsiusqc.cp_tweaks.base.armors;
+package net.celsiusqc.cp_tweaks.compat.geckolib;
 
-import net.celsiusqc.cp_tweaks.item.client.IceShardArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
