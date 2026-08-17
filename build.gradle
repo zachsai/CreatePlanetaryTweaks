@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev.legacyforge' version '2.0.144'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -168,4 +169,32 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = findProperty('curseforge_token') ?: System.getenv('CURSEFORGE_TOKEN')
+
+    def mainFile = upload(594527, jar)
+    mainFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    mainFile.releaseType = 'beta'
+    mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : 'See GitHub for changes.'
+    mainFile.changelogType = 'markdown'
+    mainFile.addModLoader('NeoForge')
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion('Java 17')
+    mainFile.addGameVersion('Client')
+    mainFile.addGameVersion('Server')
+    // Soft dependencies with 1.20.1 files on CurseForge
+    mainFile.addOptional('create')
+    mainFile.addOptional('ad-astra')
+    mainFile.addOptional('ad-astra-rocketed')
+    mainFile.addOptional('alexs-mobs')
+    mainFile.addOptional('citadel')
+    mainFile.addOptional('serene-seasons')
+    mainFile.addOptional('lendercataclysm')
+    mainFile.addOptional('the-twilight-forest')
+    mainFile.addOptional('blue-skies')
+    mainFile.addOptional('geckolib')
+    mainFile.addOptional('jei')
+    mainFile.addOptional('just-enough-resources-jer')
 }
