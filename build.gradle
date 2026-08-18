@@ -1,159 +1,66 @@
-buildscript {
-    repositories {
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
-    id 'eclipse'
     id 'idea'
+    id 'java-library'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.144'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
 }
 
-apply plugin: 'org.spongepowered.mixin'
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
 
-
-// Read the mod_version property from gradle.properties
-def modVersion = project.findProperty("mod_version") ?: "1.0.5-1.20.1"
-
-version = "forge-1.20.1-$modVersion"
-group = 'net.celsiusqc.cp_tweaks' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'cp_tweaks'
+def modVersion = project.findProperty("mod_version") ?: "1.0.21"
+version = "neoforge-1.20.1-$modVersion"
+group = 'net.celsiusqc.cp_tweaks'
 
 base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+// Mojang ships Java 17 to end users in 1.20.1, so mods should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
-    //
-    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
-    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
-    //
-    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
-    // Additional setup is needed to use their mappings: https://parchmentmc.org/docs/getting-started
-    //
-    // Use non-default mappings at your own risk. They may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: mapping_channel, version: mapping_version
+legacyForge {
+    // Specify the version of MinecraftForge to use.
+    version = project.minecraft_version + '-' + project.forge_version
 
-    // When true, this property will have all Eclipse run configurations run the "prepareX" task for the given run configuration before launching the game.
-    // In most cases, it is not necessary to enable.
-    // enableEclipsePrepareRuns = true
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
 
-    // When true, this property will have all IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
-    // In most cases, it is not necessary to enable.
-    // enableIdeaPrepareRuns = true
-
-    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
-    // It is REQUIRED to be set to true for this template to function.
-    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-    copyIdeResources = true
-
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
-
-    // This property enables access transformers for use in development.
-    // They will be applied to the Minecraft artifact.
-    // The access transformer file can be anywhere in the project.
-    // However, it must be at "META-INF/accesstransformer.cfg" in the final mod jar to be loaded by Forge.
-    // This default location is a best practice to automatically put the file in the right place in the final jar.
-    // See https://docs.minecraftforge.net/en/latest/advanced/accesstransformers/ for more information.
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+            client()
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         }
 
         server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+            server()
+            programArgument '--nogui'
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         }
 
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+            type = "gameTestServer"
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
-            workingDirectory project.file('run')
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
 
-            property 'forge.logging.markers', 'REGISTRIES'
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
 
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
@@ -161,187 +68,133 @@ minecraft {
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+// Sets up 'localRuntime'/'modLocalRuntime' for runtime-only optional dependencies
+// that should not be pulled in transitively by dependents of this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+obfuscation {
+    createRemappingConfiguration(configurations.localRuntime)
+}
+
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
     maven { url "https://www.cursemaven.com" }
     maven {
-        name "Modding Legacy Maven"
-        url "https://maven.moddinglegacy.com/maven"
-    }
-    maven {
-        // Location of the maven that hosts Terrarium and Team Resourceful's files.
-        name = "Team Resourceful Maven"
-        url = "https://maven.resourcefulbees.com/repository/maven-public/"
-    }
-    maven {
-        url "https://nexus.resourcefulbees.com/repository/telepathicgrunt/"
-    }
-
-    maven {
         name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
-
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    maven {
+        name = 'BlameJared (JEI)'
+        url = 'https://maven.blamejared.com'
+    }
 }
 
 dependencies {
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation fg.deobf("curse.maven:hang-glider-852668:4611981")
-    implementation fg.deobf("curse.maven:puzzles-lib-495476:4621178")
-    //Waystones
-    implementation fg.deobf("curse.maven:waystones-245755:4584510")
-    implementation fg.deobf("curse.maven:balm-531761:4597440")
+    // Soft integrations — compile-time only, gated at runtime by ModList checks.
+    // See CLAUDE.md's integration matrix for what each unlocks.
+    modCompileOnly "curse.maven:create-328085:4626108"
+    modCompileOnly "curse.maven:ad-astra-635042:5116766"
+    modCompileOnly "curse.maven:ad-astra-rocketed-996980:5245376"
+    modCompileOnly "curse.maven:alexs-mobs-426558:4618074"
+    modCompileOnly "curse.maven:citadel-331936:4613231"
+    modCompileOnly "curse.maven:serene-seasons-291874:4611121"
+    modCompileOnly "curse.maven:l_ender-s-cataclysm-551586:4665435"
+    modCompileOnly "curse.maven:the-twilight-forest-227639:5071019"
+    modCompileOnly "curse.maven:blue-skies-312918:5010316"
+    modCompileOnly "curse.maven:structure-gel-api-378802:5188368"
+    modCompileOnly 'software.bernie.geckolib:geckolib-forge-1.20:4.2'
 
-    implementation fg.deobf("curse.maven:worldedit-225608:4586218")
-    // compile against the JEI API but do not include it at runtime
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.23"))
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.23"))
-    // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.2.0.23"))
-    implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:4631691")
+    modLocalRuntime "curse.maven:create-328085:4626108"
+    modLocalRuntime "curse.maven:ad-astra-635042:5116766"
+    modLocalRuntime "curse.maven:ad-astra-rocketed-996980:5245376"
+    modLocalRuntime "curse.maven:resourceful-lib-570073:5210240"
+    modLocalRuntime "curse.maven:resourceful-config-714059:5020441"
+    modLocalRuntime "curse.maven:botarium-704113:5118353"
+    modLocalRuntime "curse.maven:alexs-mobs-426558:4618074"
+    modLocalRuntime "curse.maven:citadel-331936:4613231"
+    modLocalRuntime "curse.maven:serene-seasons-291874:4611121"
+    modLocalRuntime "curse.maven:l_ender-s-cataclysm-551586:4665435"
+    modLocalRuntime "curse.maven:the-twilight-forest-227639:5071019"
+    modLocalRuntime "curse.maven:blue-skies-312918:5010316"
+    modLocalRuntime "curse.maven:structure-gel-api-378802:5188368"
+    modLocalRuntime 'software.bernie.geckolib:geckolib-forge-1.20:4.2'
 
-    //Ad Astra
-    implementation fg.deobf("curse.maven:ad-astra-635042:5116766")
-    implementation fg.deobf("curse.maven:resourceful-lib-570073:5210240")
-    implementation fg.deobf("curse.maven:resourceful-config-714059:5020441")
-    implementation fg.deobf("curse.maven:botarium-704113:5118353")
-
-    //Rats
-    implementation fg.deobf("curse.maven:rats-323596:4608071")
-    implementation fg.deobf("curse.maven:citadel-331936:4613231")
-
-    //Suggestion Provider for commands
-    implementation fg.deobf("curse.maven:suggestion-provider-fix-469647:4591193")
-
-    //Create
-    implementation fg.deobf("curse.maven:create-328085:4626108")
-
-    //Alexsmobs
-    implementation fg.deobf("curse.maven:alexs-mobs-426558:4618074")
-    implementation fg.deobf("curse.maven:citadel-331936:4613231")
-
-    //Serene Seasons
-    implementation fg.deobf("curse.maven:serene-seasons-291874:4611121")
-
-    //Rubidium & Oculus
-    implementation fg.deobf("curse.maven:rubidium-574856:4573226")
-    implementation fg.deobf("curse.maven:oculus-581495:4578741")
-
-    //Consecration
-    implementation fg.deobf("curse.maven:consecration-284001:4638141")
-
-    //CraftTweaker
-    implementation fg.deobf("curse.maven:crafttweaker-239197:4640784")
-
-    //Cataclysm
-    implementation fg.deobf("curse.maven:l_ender-s-cataclysm-551586:4665435")
-
-    //Geckolib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20:4.2')
-
-    //Ad Astra Rocketed
-    implementation fg.deobf("curse.maven:ad-astra-rocketed-996980:5245376")
-
-    //Twilight Forest
-    implementation fg.deobf("curse.maven:the-twilight-forest-227639:5071019")
-
-    //Blue Skies
-    implementation fg.deobf("curse.maven:blue-skies-312918:5010316")
-    implementation fg.deobf("curse.maven:structure-gel-api-378802:5188368")
-
-    //Useful Spyglass
-    implementation fg.deobf("curse.maven:useful-spyglass-840027:5245771")
-
-
-
-    //Blur Mod
-    /*implementation fg.deobf("curse.maven:blur-forge-823106:4631831")
-    implementation fg.deobf("curse.maven:cloth-config-348521:4633444")*/
-
-
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    modCompileOnly "mezz.jei:jei-1.20.1-common-api:15.2.0.23"
+    modCompileOnly "mezz.jei:jei-1.20.1-forge-api:15.2.0.23"
+    modLocalRuntime "mezz.jei:jei-1.20.1-forge:15.2.0.23"
+    modLocalRuntime "curse.maven:just-enough-resources-jer-240630:4631691"
 }
 
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [
-        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-        forge_version: forge_version, forge_version_range: forge_version_range,
-        loader_version_range: loader_version_range,
-        mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-        mod_authors: mod_authors, mod_description: mod_description
-]
-processResources {
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version          : forge_version,
+            forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
-    filesMatching(resourceTargets) {
-        expand replaceProperties
-    }
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
-
-// Example for how to get properties into the manifest for reading at runtime.
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : mod_authors,
-                "Specification-Version"   : project.version,
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : mod_authors,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
+sourceSets.main.resources.srcDir generateModMetadata
+legacyForge.ideSyncTask generateModMetadata
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url "file://${project.projectDir}/repo"
         }
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = findProperty('curseforge_token') ?: System.getenv('CURSEFORGE_TOKEN')
+
+    def mainFile = upload(594527, jar)
+    mainFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    mainFile.releaseType = 'beta'
+    mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : 'See GitHub for changes.'
+    mainFile.changelogType = 'markdown'
+    mainFile.addModLoader('NeoForge')
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion('Java 17')
+    mainFile.addGameVersion('Client')
+    mainFile.addGameVersion('Server')
+    // Soft dependencies with 1.20.1 files on CurseForge
+    mainFile.addOptional('create')
+    mainFile.addOptional('ad-astra')
+    mainFile.addOptional('ad-astra-rocketed')
+    mainFile.addOptional('alexs-mobs')
+    mainFile.addOptional('citadel')
+    mainFile.addOptional('serene-seasons')
+    mainFile.addOptional('lendercataclysm')
+    mainFile.addOptional('the-twilight-forest')
+    mainFile.addOptional('blue-skies')
+    mainFile.addOptional('geckolib')
+    mainFile.addOptional('jei')
+    mainFile.addOptional('just-enough-resources-jer')
 }

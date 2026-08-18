@@ -104,27 +104,25 @@ public class Armor {
                     .rarity(Rarity.UNCOMMON)));
 
 
-    //BLUE
-    public static final RegistryObject<ArmorItem> ICE_SHARD_HELMET = ITEMS.register("ice_shard_helmet",
-            () -> new IceShardArmorItem(ArmorTiers.ICE_SHARD, ArmorItem.Type.HELMET, new Item.Properties()
+    // Ice Shard armor uses the animated GeckoLib model when GeckoLib is
+    // installed, otherwise falls back to a plain armor item. Soft dependency.
+    public static final RegistryObject<ArmorItem> ICE_SHARD_HELMET = registerIceShard("ice_shard_helmet", ArmorItem.Type.HELMET);
+    public static final RegistryObject<ArmorItem> ICE_SHARD_CHESTPLATE = registerIceShard("ice_shard_chestplate", ArmorItem.Type.CHESTPLATE);
+    public static final RegistryObject<ArmorItem> ICE_SHARD_LEGGINGS = registerIceShard("ice_shard_leggings", ArmorItem.Type.LEGGINGS);
+    public static final RegistryObject<ArmorItem> ICE_SHARD_BOOTS = registerIceShard("ice_shard_boots", ArmorItem.Type.BOOTS);
+
+    private static RegistryObject<ArmorItem> registerIceShard(String name, ArmorItem.Type type) {
+        return ITEMS.register(name, () -> {
+            Item.Properties properties = new Item.Properties()
                     .stacksTo(1)
                     .fireResistant()
-                    .rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<ArmorItem> ICE_SHARD_CHESTPLATE = ITEMS.register("ice_shard_chestplate",
-            () -> new IceShardArmorItem(ArmorTiers.ICE_SHARD, ArmorItem.Type.CHESTPLATE, new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-                    .rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<ArmorItem> ICE_SHARD_LEGGINGS = ITEMS.register("ice_shard_leggings",
-            () -> new IceShardArmorItem(ArmorTiers.ICE_SHARD, ArmorItem.Type.LEGGINGS, new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-                    .rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<ArmorItem> ICE_SHARD_BOOTS = ITEMS.register("ice_shard_boots",
-            () -> new IceShardArmorItem(ArmorTiers.ICE_SHARD, ArmorItem.Type.BOOTS, new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-                    .rarity(Rarity.UNCOMMON)));
+                    .rarity(Rarity.UNCOMMON);
+            if (net.minecraftforge.fml.ModList.get().isLoaded("geckolib")) {
+                return net.celsiusqc.cp_tweaks.compat.geckolib.GeckoLibCompat.createIceShardArmor(ArmorTiers.ICE_SHARD, type, properties);
+            }
+            return new ArmorItem(ArmorTiers.ICE_SHARD, type, properties);
+        });
+    }
 
 
 
